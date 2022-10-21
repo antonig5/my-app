@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import UseReducer from "./UserReducer";
-import UseContext from "./UserContext";
+import userContext from "./UserContext";
 
 const UserState = (props) => {
   const InicialState = {
@@ -9,22 +9,39 @@ const UserState = (props) => {
   };
   const [state, dispatch] = useReducer(UseReducer, InicialState);
   const getUsers = () => {
-    const res = fetch("http://localhost:3050/usuario")
+    fetch("http://localhost:3050/auth/login", {
+      method: "POST",
+      body: {
+        usuario: "pepe143",
+        clave: "pepe041",
+        correo: "pepe@yahoo.com2",
+      },
+      headers: {
+        "content-type": "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
+        dispatch({
+          type: "Get_Users",
+          payload: data,
+        });
         console.log(data);
       });
   };
   const getProfiles = (id) => {
-    const res = fetch("http://localhost:3050/usuario/" + id)
+    fetch("http://localhost:3050/usuario/" + id)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        dispatch({
+          type: "Get_Profile",
+          payload: data,
+        });
       });
   };
 
   return (
-    <UseContext.Provider
+    <userContext.Provider
       value={{
         users: state.users,
         selectUser: state.selectUser,
@@ -33,7 +50,7 @@ const UserState = (props) => {
       }}
     >
       {props.children}
-    </UseContext.Provider>
+    </userContext.Provider>
   );
 };
 
