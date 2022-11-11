@@ -6,19 +6,20 @@ const UserState = (props) => {
   const InicialState = {
     users: [],
     selectUser: null,
+    selectEmail: [],
   };
   const [state, dispatch] = useReducer(UseReducer, InicialState);
-  const getUsers = () => {
-    fetch("http://localhost:3050/auth/login", {
-      method: "POST",
-      body: {
-        usuario: "pepe143",
-        clave: "pepe041",
-        correo: "pepe@yahoo.com2",
-      },
+
+  const verify = (clave1, clave2, id) => {
+    fetch("http://localhost:3040/users/update/" + id, {
+      method: "PUT",
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        clave: clave1,
+        clave: clave2,
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -26,11 +27,57 @@ const UserState = (props) => {
           type: "Get_Users",
           payload: data,
         });
-        console.log(data);
+      });
+  };
+
+  const reset = (correo) => {
+    fetch("http://localhost:3040/auth/resetpassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        correo: correo,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "Get_email",
+          payload: data,
+        });
+      });
+  };
+
+  const getUsers = (usuario, clave, correo) => {
+    fetch("http://localhost:3040/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        usuario: usuario,
+        clave: clave,
+        correo: correo,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "Get_Users",
+          payload: data,
+        });
       });
   };
   const getProfiles = (id) => {
-    fetch("http://localhost:3050/usuario/" + id)
+    fetch("http://localhost:3040/usuario/" + id, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "",
+      },
+    })
       .then((res) => res.json())
       .then((data) => {
         dispatch({
@@ -46,7 +93,10 @@ const UserState = (props) => {
         users: state.users,
         selectUser: state.selectUser,
         getUsers,
+        reset,
+        selectEmail: state.selectEmail,
         getProfiles,
+        verify,
       }}
     >
       {props.children}

@@ -1,4 +1,4 @@
-import { Get_Users, Get_Profile } from "../type";
+import { Get_Users, Get_Profile, Get_email } from "../type";
 
 export default (state, action) => {
   const { payload, type } = action;
@@ -14,6 +14,12 @@ export default (state, action) => {
         ...state,
         selectUser: payload,
       };
+    case Get_email:
+      return {
+        ...state,
+        selectEmail: payload,
+      };
+
     default:
       return state;
   }
