@@ -1,0 +1,37 @@
+.login-form {
+  margin-top: 5rem;
+  margin-left: 10rem;
+  max-width: 300px;
+}
+.login-form-forgot {
+  float: right;
+}
+.ant-col-rtl .login-form-forgot {
+  float: left;
+}
+.login-form-button {
+  width: 100%;
+}
+.verify-email-form {
+  max-width: 400px;
+  margin-left: 30rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
+  border-radius: 10px;
+  border: solid 2px #dfe1e3;
+}
+
+.verify-button-email {
+  width: 100%;
+
+  margin-bottom: 5rem;
+}
+.verify-input-email {
+  margin-top: 10px;
+}
+.title-form-email {
+  margin-left: 30rem;
+  margin-bottom: 1rem;
+  margin-top: 5rem;
+}

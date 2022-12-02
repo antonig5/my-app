@@ -1,42 +1,50 @@
-import { Button, Alert, Form, Input } from "antd";
-import React, { useContext, useState } from "react";
+import { Button, Form, Input, message } from "antd";
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { LockOutlined } from "@ant-design/icons";
 import userContext from "../../context/User/UserContext";
-const FormPass = () => {
-  const [pass, setPass] = useState({});
-  const onFinish = (values) => {
-    setPass(values);
-    console.log(values);
-  };
+import "../../components/css/antd.css";
 
-  const UserContext = useContext(userContext);
+const FormPass = () => {
+  const [pass, setPass] = useState({ password1: "", password2: "" });
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  if (UserContext.verify.status == 200) {
-    <Navigate to="/" />;
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let loc = document.location.href;
+
+    fetch("http://localhost:3040/users/update/" + loc.split("/")[5], {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        clave: pass.password1,
+        clave2: pass.password2,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.iderror == 2) {
+          message.error(data.mensaje);
+        } else if (data.id == loc.split("/")[5]) {
+          <Navigate to="/sucessfull" />;
+        }
+      });
+  };
 
   return (
     <Form
       name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
+      onSubmitCapture={handleSubmit}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
+      className="verify-email-form "
     >
       <Form.Item
-        label="Contraseña"
         name="password1"
         rules={[
           {
@@ -45,11 +53,15 @@ const FormPass = () => {
           },
         ]}
       >
-        <Input.Password />
+        <Input.Password
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          placeholder="Dijita tu nueva contraseña"
+          value={pass.password1}
+          onChange={(e) => setPass({ ...pass, password1: e.target.value })}
+        />
       </Form.Item>
 
       <Form.Item
-        label="Repetir Contraseña"
         name="password2"
         rules={[
           {
@@ -57,7 +69,12 @@ const FormPass = () => {
           },
         ]}
       >
-        <Input.Password />
+        <Input.Password
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          placeholder="Repite tu contraseña"
+          value={pass.password2}
+          onChange={(e) => setPass({ ...pass, password2: e.target.value })}
+        />
       </Form.Item>
 
       <Form.Item
@@ -69,7 +86,9 @@ const FormPass = () => {
         <Button
           type="primary"
           htmlType="submit"
-          onClick={UserContext.verify(pass.password1, pass.password2, "134")}
+          style={{
+            width: 200,
+          }}
         >
           Submit
         </Button>

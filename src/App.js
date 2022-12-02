@@ -9,6 +9,7 @@ import ResultError from "./ResultError";
 import ResetPassword from "./pages/resetpassword/ResetPasword";
 import Nodemail from "./pages/Nodemail/Nodemail";
 import FormPass from "./pages/resetpassword/FormPass";
+import Successfully from "./pages/SucessfullPass";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/reset" element={<ResetPassword />} />
           <Route path="/reset/*" element={<Nodemail />} />
           <Route path="/reset/password/*" element={<FormPass />} />
+          <Route path="/sucessfull" element={<Successfully />} />
           <Route path="*" element={<ResultError />} />
         </Routes>
       </BrowserRouter>
