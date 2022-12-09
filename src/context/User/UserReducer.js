@@ -1,4 +1,4 @@
-import { Get_Users, Get_Profile, Get_email } from "../type";
+import { Get_Users, Get_Profile, Get_email, Get_Novedad } from "../type";
 
 export default (state, action) => {
   const { payload, type } = action;
@@ -18,6 +18,11 @@ export default (state, action) => {
       return {
         ...state,
         selectEmail: payload,
+      };
+    case Get_Novedad:
+      return {
+        ...state,
+        novedades: payload,
       };
 
     default:

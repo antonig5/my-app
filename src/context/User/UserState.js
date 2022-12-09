@@ -7,6 +7,7 @@ const UserState = (props) => {
     users: [],
     selectUser: null,
     selectEmail: [],
+    novedades: [],
   };
   const [state, dispatch] = useReducer(UseReducer, InicialState);
 
@@ -29,6 +30,22 @@ const UserState = (props) => {
       type: "Get_Users",
       payload: data,
     });
+  };
+
+  const getNovedades = () => {
+    fetch("http://localhost:3040/novedades", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: "Get_Novedad",
+          payload: data,
+        });
+      });
   };
 
   const getProfiles = (id) => {
@@ -58,6 +75,8 @@ const UserState = (props) => {
         selectEmail: state.selectEmail,
         getProfiles,
         verify,
+        novedades: state.novedades,
+        getNovedades,
       }}
     >
       {props.children}

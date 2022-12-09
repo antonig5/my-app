@@ -45,7 +45,9 @@ const Login = () => {
       });
   };
 
-  if (UserContext.users.token) {
+  if (UserContext.users.rol == 2) {
+    return <Navigate to="/prueba" />;
+  } else if (UserContext.users.rol == 1) {
     return <Navigate to="/admin" />;
   }
 
